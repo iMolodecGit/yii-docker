@@ -1,0 +1,44 @@
+version: '3'
+
+services:
+  redis:
+    image: redis
+    container_name: m_redis
+    restart: always
+    ports:
+      - "6380:6379"
+    networks:
+      - internal_network
+  mysql:
+    build: mysql
+    container_name: m_mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'moscow'
+      MYSQL_USER: 'root'
+      MYSQL_PASSWORD: 'root'
+      MYSQL_ROOT_PASSWORD: 'root'
+    volumes:
+      - ./mysql_files:/var/lib/mysql
+    expose:
+      - '3306'
+    ports:
+      - "3309:3306"
+    networks:
+      - internal_network
+  project:
+    build: project
+    container_name: m_project
+    volumes:
+      - ../project:/var/www/app
+    working_dir: /var/www/app
+#    expose:
+#      - '80'
+    ports:
+      - "8085:80"
+    networks:
+      - internal_network
+#      - devlocal
+#    command: bash -c "./yii migrate --interactive=0 && nginx -g 'daemon off;'" // TODO run migrations and php-fpm and nginx
+networks:
+  internal_network:
