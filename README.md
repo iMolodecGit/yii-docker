@@ -17,5 +17,8 @@ useful commands:
 # show all containers 
 docker ps   
 
+#up container
+docker-compose up [containerName]
+
 # execute an interactive bash shell on the container
 docker exec -it ${containerId} bash  
